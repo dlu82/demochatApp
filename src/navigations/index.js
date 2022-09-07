@@ -9,6 +9,7 @@ import Navigations from './navigations';
 import InitialScreen from '../screens/InitialScreen';
 import SignUp from '../screens/SignUpScreen';
 import Login from '../screens/LoginScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 const index = () => {
   const Stack = createStackNavigator();
@@ -30,6 +31,7 @@ const index = () => {
         <Stack.Screen name={Navigations.initial} component={InitialScreen} />
         {/* <Stack.Screen name={Navigations.initial} component={Login} /> */}
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="chat" component={ChatScreen} />
       </Stack.Navigator>
     </React.Fragment>
   );
