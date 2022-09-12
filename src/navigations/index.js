@@ -7,6 +7,9 @@ import {
 import {TransitionSpecs} from '@react-navigation/stack';
 import Navigations from './navigations';
 import InitialScreen from '../screens/InitialScreen';
+import SignUp from '../screens/SignUpScreen';
+import Login from '../screens/LoginScreen';
+
 const index = () => {
   const Stack = createStackNavigator();
 
@@ -25,6 +28,8 @@ const index = () => {
         }}
         initialRouteName={Navigations.initial}>
         <Stack.Screen name={Navigations.initial} component={InitialScreen} />
+        {/* <Stack.Screen name={Navigations.initial} component={Login} /> */}
+        <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Navigator>
     </React.Fragment>
   );

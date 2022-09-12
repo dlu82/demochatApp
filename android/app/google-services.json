@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "861489166871",
+    "project_id": "rn-chat-app-c9dac",
+    "storage_bucket": "rn-chat-app-c9dac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861489166871:android:3fe24ea6a7ec3953743a52",
+        "android_client_info": {
+          "package_name": "com.demochatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861489166871-22cdba2nf9hbp1r34r3dfnlta5dbe4uj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3_YvfRnF-4R_AucSA2oU_29TpedAu3ZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861489166871-22cdba2nf9hbp1r34r3dfnlta5dbe4uj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
