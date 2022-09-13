@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,12 +6,12 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
-import {useFormik} from 'formik';
-import * as yup from 'yup';
+import firestore from '@react-native-firebase/firestore';
 
 import style from './style';
 import image from '../../constants/Images';
@@ -21,36 +21,86 @@ import ErrCompnt from '../../components/ErrorMessgComponent';
 
 const index = () => {
   const navigation = useNavigation();
+
+  const [username, setUsername] = useState('');
   const [mail, setMail] = useState('');
+  const [errMail, setErrmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errPass, setErrpass] = useState('');
+  // const [errors, setErrors] = useState({
+  //   username: false,
+  //   mail: false,
+  //   pass: false,
+  // });
+
+  useEffect(() => {
+    if (mail != '') {
+      const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      const mailValid = reg.test(mail);
+      console.log('mail-------------------', mailValid);
+      setErrmail({errMail: !mailValid});
+      if (mailValid) {
+        setErrmail(false);
+      } else {
+        setErrmail(true);
+      }
+    }
+    if (password != '') {
+      if (password.length >= 5) {
+        setErrpass(false);
+      } else {
+        setErrpass(true);
+      }
+    }
+  }, [mail, password]);
 
   const onSignin = () => {
-    auth()
-      .signInWithEmailAndPassword(mail, password)
-      .then(response => {
-        console.log('Login Success!', response);
-      })
-      .catch(error => {
-        console.log('sign in error=======', error.code);
-        if (error.code === 'auth/user-not-found') {
-          // console.log('That email address is already in use!');
-          alert('User not Found Please Register Or Check Password');
-        }
+    console.log('signinnn===');
+    if (!errPass && !errMail) {
+      auth()
+        .signInWithEmailAndPassword(mail, password)
+        .then(response => {
+          console.log('Login Success!', response);
+          Keyboard.dismiss();
+          setMail('');
+          setPassword('');
+        })
+        .catch(error => {
+          console.log('sign in error=======', error.code);
+          if (error.code === 'auth/user-not-found') {
+            // console.log('That email address is already in use!');
+            alert('User not Found Please Register Or Check Password');
+          }
 
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
 
-        console.error(error);
-      });
+          console.error(error);
+        });
+    }
   };
 
-  const onSignup = () => {
+  const onSignup = async () => {
     console.log('Pressedddddd==');
     auth()
       .createUserWithEmailAndPassword(mail, password)
       .then(() => {
         console.log('User account created & signed in!');
+
+        firestore()
+          .collection('USER')
+          .doc(mail)
+          .set({
+            name: username,
+          })
+          .then(res => {
+            console.log('User added!===== ', res);
+            Keyboard.dismiss();
+            setMail('');
+            setPassword('');
+          })
+          .catch(err => console.log('add firestore error=====', err));
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
@@ -65,28 +115,6 @@ const index = () => {
         console.error(error);
       });
   };
-  const validationSchema = yup.object({
-    email: yup.string().email('Invalid email').required('Required'),
-    password: yup
-      .string()
-      .min(6, 'Too Short!')
-      // .max(10, 'Too Long!')
-      .required('Required'),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-
-    // validationSchema,
-    onSubmit: values => {
-      console.log('FORMIK VALUE=====', values);
-      onSignup(values);
-      onSignin(values);
-    },
-  });
 
   return (
     <View style={style.container}>
@@ -106,21 +134,25 @@ const index = () => {
               color: '#000',
               fontSize: 30,
               textAlign: 'center',
-              marginTop: 50,
+              marginTop: 30,
               fontWeight: 'bold',
             }}>
             chat with your friends
           </Text>
           <View>
             <TextInput
-              Textinput={'Email/Phone number'}
+              Textinput={'Username'}
+              inputColor={'#7E84A3'}
+              onChangeText={text => setUsername(text)}
+              value={username}
+            />
+            <TextInput
+              Textinput={'Email'}
               inputColor={'#7E84A3'}
               onChangeText={text => setMail(text)}
               value={mail}
             />
-            {/* {formik.errors.email && formik.touched.email && (
-              <ErrCompnt msg={formik.errors.email} />
-            )} */}
+            {errMail && <ErrCompnt msg={'Email is not valid'} />}
             <TextInput
               Textinput={'Password'}
               inputColor={'#7E84A3'}
@@ -129,9 +161,7 @@ const index = () => {
               onChangeText={text => setPassword(text)}
               value={password}
             />
-            {/* {formik.errors.password && formik.touched.password && (
-              <ErrCompnt msg={formik.errors.password} />
-            )} */}
+            {errPass && <ErrCompnt msg={'Password is too short'} />}
 
             <View style={{position: 'absolute', right: 28, bottom: -15}}>
               <TouchableOpacity>
