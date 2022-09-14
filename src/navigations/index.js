@@ -5,11 +5,10 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import {TransitionSpecs} from '@react-navigation/stack';
-import Navigations from './navigations';
 import InitialScreen from '../screens/InitialScreen';
 import SignUp from '../screens/SignUpScreen';
 import Login from '../screens/LoginScreen';
-import ChatScreen from '../screens/ChatScreen';
+// import ChatScreen from '../screens/ChatScreen';
 
 import ConvoScreen from '../screens/ConvoScreen';
 import BottomNavigation from './BottomNavigation';
@@ -29,11 +28,11 @@ const index = () => {
             close: TransitionSpecs.TransitionIOSSpec,
           },
         }}
-        initialRouteName={Navigations.bottomNav}>
-        <Stack.Screen name={Navigations.initial} component={InitialScreen} />
+        initialRouteName={'initial'}>
+        <Stack.Screen name={'initial'} component={InitialScreen} />
         {/* <Stack.Screen name={Navigations.initial} component={Login} /> */}
         <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="chat" component={ChatScreen} />
+        {/* <Stack.Screen name="chat" component={ChatScreen} /> */}
         <Stack.Screen name="convo" component={ConvoScreen} />
         <Stack.Screen name="bottomNav" component={BottomNavigation} />
       </Stack.Navigator>
