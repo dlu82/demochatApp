@@ -4,7 +4,9 @@ import React from 'react';
 const Index = () => {
   return (
     <View>
-      <Text style={{fontSize: 20, fontWeight: 'bold'}}>Messages </Text>
+      <Text style={{fontSize: 20, fontWeight: 'bold', color: 'black'}}>
+        Messages{' '}
+      </Text>
     </View>
   );
 };
