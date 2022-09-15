@@ -31,6 +31,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 20,
   },
+  recieveChat: {
+    padding: 13,
+    backgroundColor: '#e5e7ef',
+    borderBottomLeftRadius: 1,
+    borderRadius: 50,
+    alignSelf: 'flex-start',
+  },
+  sendChat: {
+    padding: 13,
+    backgroundColor: '#00b2ee',
+    borderBottomRightRadius: 1,
+    borderRadius: 50,
+    alignSelf: 'flex-end',
+  },
 });
 
 export default styles;

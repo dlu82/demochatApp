@@ -10,8 +10,11 @@ import {
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
+
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {useDispatch, useSelector} from 'react-redux';
+import {userData} from '../../store/Slices/FirebaseSlice';
 
 import style from './style';
 import image from '../../constants/Images';
@@ -22,22 +25,22 @@ import ErrCompnt from '../../components/ErrorMessgComponent';
 const index = () => {
   const navigation = useNavigation();
 
+  const dispatch = useDispatch({});
+  const {data} = useSelector(state => state.firebaseStore);
+
+  console.log('SUCCESSSS======  ', {data});
+
   const [username, setUsername] = useState('');
   const [mail, setMail] = useState('');
   const [errMail, setErrmail] = useState('');
   const [password, setPassword] = useState('');
   const [errPass, setErrpass] = useState('');
-  // const [errors, setErrors] = useState({
-  //   username: false,
-  //   mail: false,
-  //   pass: false,
-  // });
 
   useEffect(() => {
     if (mail != '') {
       const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       const mailValid = reg.test(mail);
-      console.log('mail-------------------', mailValid);
+      // console.log('mail-------------------', mailValid);
       setErrmail({errMail: !mailValid});
       if (mailValid) {
         setErrmail(false);
@@ -60,7 +63,10 @@ const index = () => {
       auth()
         .signInWithEmailAndPassword(mail, password)
         .then(response => {
-          console.log('Login Success!', response);
+          console.log('Login Success!======', response?.user?._user);
+
+          dispatch(userData(response?.user?._user?.email));
+
           Keyboard.dismiss();
           setMail('');
           setPassword('');
@@ -93,9 +99,12 @@ const index = () => {
           .doc(mail)
           .set({
             name: username,
+            email: mail,
           })
           .then(res => {
             console.log('User added!===== ', res);
+            dispatch(userData(response?.user?._user));
+
             Keyboard.dismiss();
             setMail('');
             setPassword('');

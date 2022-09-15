@@ -14,22 +14,26 @@ const styles = StyleSheet.create({
   },
   CustomComponentView: {
     flex: 1,
+    paddingVertical: 20,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginHorizontal: 16,
-    marginTop: 20,
+
+    backgroundColor: '#f4fafc',
+    borderRadius: 50,
+    marginVertical: 10,
   },
   nameView: {
+    // marginLeft: 20,
     fontWeight: 'bold',
     color: 'black',
-    fontSize: 19,
+    fontSize: 17,
   },
 
   image: {
     width: 60,
     height: 60,
-    borderRadius: 30,
+    borderRadius: 50,
   },
 });
 export default styles;

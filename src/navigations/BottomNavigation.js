@@ -12,7 +12,7 @@ const BottomNavigation = () => {
   return (
     <BottomTab.Navigator
       backBehavior={'history'}
-      initialRouteName={'Call'}
+      initialRouteName={'Messages'}
       screenOptions={{
         tabBarStyle: {
           backgroundColor: '#001f28',

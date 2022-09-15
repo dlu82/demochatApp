@@ -6,10 +6,6 @@ import {
 } from '@react-navigation/stack';
 import {TransitionSpecs} from '@react-navigation/stack';
 import InitialScreen from '../screens/InitialScreen';
-import SignUp from '../screens/SignUpScreen';
-import Login from '../screens/LoginScreen';
-// import ChatScreen from '../screens/ChatScreen';
-
 import ConvoScreen from '../screens/ConvoScreen';
 import BottomNavigation from './BottomNavigation';
 const index = () => {
@@ -30,9 +26,6 @@ const index = () => {
         }}
         initialRouteName={'initial'}>
         <Stack.Screen name={'initial'} component={InitialScreen} />
-        {/* <Stack.Screen name={Navigations.initial} component={Login} /> */}
-        <Stack.Screen name="SignUp" component={SignUp} />
-        {/* <Stack.Screen name="chat" component={ChatScreen} /> */}
         <Stack.Screen name="convo" component={ConvoScreen} />
         <Stack.Screen name="bottomNav" component={BottomNavigation} />
       </Stack.Navigator>
