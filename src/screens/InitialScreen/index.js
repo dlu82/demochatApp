@@ -12,9 +12,10 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import Modal from 'react-native-modal';
 
 import style from './style';
-import image from '../../constants/Images';
+import image from '../../constants/image';
 import Buttn from '../../components/Buttn Components';
 import TextInput from '../../components/InputComponent';
 import ErrCompnt from '../../components/ErrorMessgComponent';
@@ -22,16 +23,13 @@ import ErrCompnt from '../../components/ErrorMessgComponent';
 const index = () => {
   const navigation = useNavigation();
 
+  const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState('');
+  const [errName, setErrname] = useState('');
   const [mail, setMail] = useState('');
   const [errMail, setErrmail] = useState('');
   const [password, setPassword] = useState('');
   const [errPass, setErrpass] = useState('');
-  // const [errors, setErrors] = useState({
-  //   username: false,
-  //   mail: false,
-  //   pass: false,
-  // });
 
   useEffect(() => {
     if (mail != '') {
@@ -52,10 +50,48 @@ const index = () => {
         setErrpass(true);
       }
     }
-  }, [mail, password]);
+    if (username != '') {
+      if (username.length >= 5) {
+        setErrname(false);
+      } else {
+        setErrname(true);
+      }
+    }
+  }, [mail, password, username]);
 
   const onSignin = () => {
     console.log('signinnn===');
+
+    if (username == '' && mail == '' && password == '') {
+      setErrname(true);
+      setErrmail(true);
+      return;
+
+      //   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      //   const mailValid = reg.test(mail);
+      //   console.log('mail-------------------', mailValid);
+      //   setErrmail({errMail: !mailValid});
+      //   if (mailValid) {
+      //     setErrmail(false);
+      //   } else {
+      //     setErrmail(true);
+      //   }
+      // }
+      // if (password != '') {
+      //   if (password.length >= 5) {
+      //     setErrpass(false);
+      //   } else {
+      //     setErrpass(true);
+      //   }
+      // }
+      // if (username != '') {
+      //   if (username.length >= 5) {
+      //     setErrname(false);
+      //   } else {
+      //     setErrname(true);
+      //   }
+    }
+
     if (!errPass && !errMail) {
       auth()
         .signInWithEmailAndPassword(mail, password)
@@ -64,6 +100,7 @@ const index = () => {
           Keyboard.dismiss();
           setMail('');
           setPassword('');
+          navigation.navigate('bottomNav');
         })
         .catch(error => {
           console.log('sign in error=======', error.code);
@@ -83,6 +120,37 @@ const index = () => {
 
   const onSignup = async () => {
     console.log('Pressedddddd==');
+
+    if (username == '' && mail == '' && password == '') {
+      setErrname(true);
+      setErrmail(true);
+      return;
+
+      //   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      //   const mailValid = reg.test(mail);
+      //   console.log('mail-------------------', mailValid);
+      //   setErrmail({errMail: !mailValid});
+      //   if (mailValid) {
+      //     setErrmail(false);
+      //   } else {
+      //     setErrmail(true);
+      //   }
+      // }
+      // if (password != '') {
+      //   if (password.length >= 5) {
+      //     setErrpass(false);
+      //   } else {
+      //     setErrpass(true);
+      //   }
+      // }
+      // if (username != '') {
+      //   if (username.length >= 5) {
+      //     setErrname(false);
+      //   } else {
+      //     setErrname(true);
+      //   }
+    }
+
     auth()
       .createUserWithEmailAndPassword(mail, password)
       .then(() => {
@@ -99,6 +167,7 @@ const index = () => {
             Keyboard.dismiss();
             setMail('');
             setPassword('');
+            navigation.navigate('bottomNav');
           })
           .catch(err => console.log('add firestore error=====', err));
       })
@@ -111,8 +180,6 @@ const index = () => {
         if (error.code === 'auth/invalid-email') {
           console.log('That email address is invalid!');
         }
-
-        console.error(error);
       });
   };
 
@@ -141,12 +208,6 @@ const index = () => {
           </Text>
           <View>
             <TextInput
-              Textinput={'Username'}
-              inputColor={'#7E84A3'}
-              onChangeText={text => setUsername(text)}
-              value={username}
-            />
-            <TextInput
               Textinput={'Email'}
               inputColor={'#7E84A3'}
               onChangeText={text => setMail(text)}
@@ -173,13 +234,35 @@ const index = () => {
         <View style={{marginTop: 20}}>
           <Buttn label={'Login'} tapOn={onSignin} />
           <Buttn
-            label={'Signup'}
+            label={'Submit'}
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
             btnStyle={{backgroundColor: '#fff'}}
-            tapOn={onSignup}
+            tapOn={() => setModalVisible(true)}
           />
         </View>
       </KeyboardAwareScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        isVisible={modalVisible}
+        backdropOpacity={0.3}
+        onBackdropPress={() => setModalVisible(false)}>
+        <View style={style.modalCont}>
+          <TextInput
+            Textinput={'Username'}
+            inputColor={'#7E84A3'}
+            onChangeText={text => setUsername(text)}
+            value={username}
+          />
+          {errName && <ErrCompnt msg={'User name is too short'} />}
+          <Buttn
+            label={'Signup'}
+            txtStyle={{color: '#BDBDBD', fontSize: 15}}
+            btnStyle={{backgroundColor: '#fff', width: 100}}
+            tapOn={onSignup}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };

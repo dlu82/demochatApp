@@ -5,13 +5,12 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import {TransitionSpecs} from '@react-navigation/stack';
-import InitialScreen from '../screens/InitialScreen';
-import SignUp from '../screens/SignUpScreen';
-import Login from '../screens/LoginScreen';
-// import ChatScreen from '../screens/ChatScreen';
 
+import InitialScreen from '../screens/InitialScreen';
 import ConvoScreen from '../screens/ConvoScreen';
 import BottomNavigation from './BottomNavigation';
+import user from '../screens/ProfileScreen';
+
 const index = () => {
   const Stack = createStackNavigator();
 
@@ -30,11 +29,9 @@ const index = () => {
         }}
         initialRouteName={'initial'}>
         <Stack.Screen name={'initial'} component={InitialScreen} />
-        {/* <Stack.Screen name={Navigations.initial} component={Login} /> */}
-        <Stack.Screen name="SignUp" component={SignUp} />
-        {/* <Stack.Screen name="chat" component={ChatScreen} /> */}
         <Stack.Screen name="convo" component={ConvoScreen} />
         <Stack.Screen name="bottomNav" component={BottomNavigation} />
+        {/* <Stack.Screen name="user" component={user} /> */}
       </Stack.Navigator>
     </React.Fragment>
   );

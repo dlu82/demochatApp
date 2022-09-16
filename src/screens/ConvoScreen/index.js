@@ -1,12 +1,14 @@
-import {View, Text, TextInput, FlatList, Image} from 'react-native';
 import React from 'react';
+import {View, Text, TextInput, FlatList, Image} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+
 import styles from './styles';
 import OptionButton from '../../components/OptionButton';
 import Backbutton from '../../components/Backbutton';
-import Feather from 'react-native-vector-icons/Feather';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import constants from '../../assets/constants/constants/';
-import {useNavigation} from '@react-navigation/native';
+import constants from '../../constants/constants';
+
 const Convo = () => {
   const navigation = useNavigation();
   const renderItem = ({item}) => <CustomComponent item={item} />;
@@ -52,17 +54,15 @@ const Convo = () => {
         <OptionButton />
       </View>
 
-      <View>
-        <View style={{marginHorizontal: 16}}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            style={{marginBottom: 150}}
-            data={constants.messages}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            initialScrollIndex={5}
-          />
-        </View>
+      <View style={{marginHorizontal: 16}}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={{marginBottom: 130}}
+          data={constants.messages}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          initialScrollIndex={5}
+        />
       </View>
 
       <View

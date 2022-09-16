@@ -1,12 +1,13 @@
-import {View, Text, FlatList, Image} from 'react-native';
 import React from 'react';
+import {View, Text, FlatList, Image} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+
 import Header from '../../components/Header';
 import OptionButton from '../../components/OptionButton';
 import SearchView from '../../components/SearchView';
 import styles from './styles';
-import constants from '../../assets/constants/constants';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import constants from '../../constants/constants';
 
 const Index = ({item}) => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const Index = ({item}) => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1, backgroundColor: '#EEEEEE'}}>
       <View style={styles.subContainer}>
         <Header />
         <OptionButton />
@@ -38,7 +39,7 @@ const Index = ({item}) => {
       <View style={{marginHorizontal: 16}}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          style={{marginBottom: 40}}
+          contentContainerStyle={{bottom: 40, marginTop: 20}}
           data={constants.flatlistData}
           renderItem={renderItem}
           keyExtractor={item => item.id}

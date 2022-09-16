@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#EEEEEE',
     marginHorizontal: 16,
     marginTop: 20,
   },

@@ -1,25 +1,27 @@
-import {useNavigation} from '@react-navigation/native';
-import ProfileScreen from '../screens/ProfileScreen';
-import CallScreen from '../screens/CallScreen';
-import MessageScreen from '../screens/MessageScreen';
 import React from 'react';
+
+import {useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import ProfileScreen from '../screens/ProfileScreen';
+import MessageScreen from '../screens/MessageScreen';
+import CallScreen from '../screens/CallScreen';
 
 const BottomNavigation = () => {
   const BottomTab = createBottomTabNavigator();
   return (
     <BottomTab.Navigator
       backBehavior={'history'}
-      initialRouteName={'Call'}
+      initialRouteName={'Messages'}
       screenOptions={{
         tabBarStyle: {
           backgroundColor: '#001f28',
-          bottom: 30,
+          bottom: 20,
           marginHorizontal: 30,
           paddingBottom: 10,
-          height: 80,
+          height: 70,
           borderRadius: 40,
           position: 'absolute',
         },
