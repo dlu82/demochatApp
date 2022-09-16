@@ -11,8 +11,13 @@ import {useNavigation} from '@react-navigation/native';
 
 import image from '../../constants/image';
 import style from './styles';
+import {useSelector} from 'react-redux';
+import {userData} from '../../store/Slices/FirebaseSlice';
 
 const index = ({}) => {
+  const {data} = useSelector(state => state.firebaseStore);
+  console.log('PROFILE===========  ', data);
+
   const navigation = useNavigation();
 
   const [username, setUsername] = useState('');
@@ -31,22 +36,16 @@ const index = ({}) => {
           }}>
           User Update
         </Text>
-        <Pressable
-          style={style.profilePic}
-          onPress={() => setModalVisible(true)}>
+        <View style={style.profilePic}>
           <ImageBackground
             source={image.User}
             style={{width: 100, height: 100}}
             imageStyle={{borderRadius: 50, resizeMode: 'contain'}}>
             <Image source={image.Camera} style={style.camera} />
           </ImageBackground>
-        </Pressable>
-        <Text style={style.input} onChangeText={text => setUsername(text)}>
-          Name:
-        </Text>
-        <Text style={style.input} onChangeText={text => setMail(text)}>
-          E mail:
-        </Text>
+        </View>
+        <Text style={style.input}>Name: {data?.name}</Text>
+        <Text style={style.input}>E mail: {data?.mail}</Text>
       </View>
     </View>
   );

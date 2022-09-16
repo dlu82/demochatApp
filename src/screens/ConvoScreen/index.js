@@ -5,8 +5,10 @@ import OptionButton from '../../components/OptionButton';
 import Backbutton from '../../components/Backbutton';
 import Feather from 'react-native-vector-icons/Feather';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import constants from '../../assets/constants/constants/';
-import {useNavigation} from '@react-navigation/native';
+import constants from '../../constants/constants/';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+
 const Convo = () => {
   const [convo, setConvo] = useState([]);
   const [chat, setChat] = useState([]);
@@ -14,6 +16,7 @@ const Convo = () => {
 
   const navigation = useNavigation();
   const Route = useRoute();
+
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
   useEffect(() => {

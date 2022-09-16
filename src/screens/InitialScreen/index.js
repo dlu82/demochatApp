@@ -50,6 +50,7 @@ const index = () => {
       } else {
         setErrmail(true);
       }
+      const users = firestore().collection('Messages').get();
     }
     if (password != '') {
       if (password.length >= 5) {
@@ -67,7 +68,7 @@ const index = () => {
     }
   }, [mail, password, username]);
 
-  const onSignin = () => {
+  const onSignin = async () => {
     console.log('signinnn===');
 
     if (username == '' && mail == '' && password == '') {
@@ -103,10 +104,15 @@ const index = () => {
     if (!errPass && !errMail) {
       auth()
         .signInWithEmailAndPassword(mail, password)
-        .then(response => {
+        .then(async response => {
           console.log('Login Success!======', response?.user?._user);
-
-          dispatch(userData(response?.user?._user?.email));
+          const user = await firestore().collection('USER').doc(mail).get();
+          const payload = {
+            name: user?._data?.name,
+            mail: user?._data?.email,
+          };
+          console.log('LOGIN USERRRR======= ', user);
+          await dispatch(userData(payload));
 
           Keyboard.dismiss();
           setMail('');
@@ -166,7 +172,10 @@ const index = () => {
       .createUserWithEmailAndPassword(mail, password)
       .then(() => {
         console.log('User account created & signed in!');
-
+        const payload = {
+          name: username,
+          mail: mail,
+        };
         firestore()
           .collection('USER')
           .doc(mail)
@@ -179,6 +188,7 @@ const index = () => {
             Keyboard.dismiss();
             setMail('');
             setPassword('');
+            dispatch(userData(payload));
             navigation.navigate('bottomNav');
           })
           .catch(err => console.log('add firestore error=====', err));
@@ -246,7 +256,7 @@ const index = () => {
         <View style={{marginTop: 20}}>
           <Buttn label={'Login'} tapOn={onSignin} />
           <Buttn
-            label={'Submit'}
+            label={'Signup'}
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
             btnStyle={{backgroundColor: '#fff'}}
             tapOn={() => setModalVisible(true)}
@@ -268,7 +278,7 @@ const index = () => {
           />
           {errName && <ErrCompnt msg={'User name is too short'} />}
           <Buttn
-            label={'Signup'}
+            label={'Submit'}
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
             btnStyle={{backgroundColor: '#fff', width: 100}}
             tapOn={onSignup}

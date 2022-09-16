@@ -26,7 +26,7 @@ const index = () => {
             close: TransitionSpecs.TransitionIOSSpec,
           },
         }}
-        initialRouteName={'initial'}>
+        initialRouteName={'initial '}>
         <Stack.Screen name={'initial'} component={InitialScreen} />
         <Stack.Screen name="convo" component={ConvoScreen} />
         <Stack.Screen name="bottomNav" component={BottomNavigation} />

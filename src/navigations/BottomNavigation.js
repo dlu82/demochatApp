@@ -15,6 +15,9 @@ const BottomNavigation = () => {
     <BottomTab.Navigator
       backBehavior={'history'}
       initialRouteName={'Messages'}
+      tabBarOptions={{
+        keyboardHidesTabBar: true,
+      }}
       screenOptions={{
         tabBarStyle: {
           backgroundColor: '#001f28',

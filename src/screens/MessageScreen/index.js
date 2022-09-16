@@ -4,15 +4,17 @@ import Header from '../../components/Header';
 import OptionButton from '../../components/OptionButton';
 import SearchView from '../../components/SearchView';
 import styles from './styles';
-import constants from '../../assets/constants/constants';
+import constants from '../../constants/constants';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import {useSelector} from 'react-redux';
 
 const Index = ({item}) => {
-  const [data, setData] = useState([]);
+  const [List, setList] = useState([]);
   const [chat, setChat] = useState([]);
   const navigation = useNavigation();
+  const {data} = useSelector(state => state.firebaseStore);
 
   useEffect(() => {
     getDataFromStore();
@@ -20,8 +22,12 @@ const Index = ({item}) => {
 
   const getDataFromStore = async () => {
     const users = await firestore().collection('USER').get();
-    console.log(users, '==================== users =============');
-    setData(users._docs);
+
+    const filterData = users._docs.filter((item, index) => {
+      console.log(item._data.email, data.mail);
+      if (item._data.email != data.mail) return item;
+    });
+    setList(filterData);
   };
 
   const renderItem = ({item}) => <CustomComponent item={item} />;
@@ -56,7 +62,7 @@ const Index = ({item}) => {
         <FlatList
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 40}}
-          data={data}
+          data={List}
           renderItem={renderItem}
           keyExtractor={item => item.id}
         />
