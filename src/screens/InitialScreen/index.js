@@ -91,8 +91,9 @@ const index = () => {
     console.log('Pressedddddd==');
     auth()
       .createUserWithEmailAndPassword(mail, password)
-      .then(() => {
-        console.log('User account created & signed in!');
+      .then(res => {
+        console.log('User account created & signed in!', res);
+        dispatch(userData(res?.user?._user?.email));
 
         firestore()
           .collection('USER')
@@ -103,7 +104,6 @@ const index = () => {
           })
           .then(res => {
             console.log('User added!===== ', res);
-            dispatch(userData(response?.user?._user));
 
             Keyboard.dismiss();
             setMail('');
