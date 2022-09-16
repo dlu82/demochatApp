@@ -13,24 +13,19 @@ import {useNavigation} from '@react-navigation/native';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import {useDispatch, useSelector} from 'react-redux';
-import {userData} from '../../store/Slices/FirebaseSlice';
-import Modal from 'react-native-modal';
 
 import style from './style';
 import image from '../../constants/image';
 import Buttn from '../../components/Buttn Components';
 import TextInput from '../../components/InputComponent';
 import ErrCompnt from '../../components/ErrorMessgComponent';
+import Modal from 'react-native-modal';
+import {userData} from '../../store/Slices/FirebaseSlice';
+import {useDispatch} from 'react-redux';
 
 const index = () => {
   const navigation = useNavigation();
-
-  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch({});
-  const {data} = useSelector(state => state.firebaseStore);
-
-  console.log('SUCCESSSS======  ', {data});
 
   const [username, setUsername] = useState('');
   const [errName, setErrname] = useState('');
@@ -38,6 +33,7 @@ const index = () => {
   const [errMail, setErrmail] = useState('');
   const [password, setPassword] = useState('');
   const [errPass, setErrpass] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (mail != '') {
@@ -253,12 +249,12 @@ const index = () => {
             </View>
           </View>
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: 20, alignItems: 'center'}}>
           <Buttn label={'Login'} tapOn={onSignin} />
           <Buttn
             label={'Signup'}
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
-            btnStyle={{backgroundColor: '#fff'}}
+            btnStyle={{backgroundColor: '#fff', width: 100}}
             tapOn={() => setModalVisible(true)}
           />
         </View>

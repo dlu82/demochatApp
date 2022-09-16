@@ -18,10 +18,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-
-    backgroundColor: '#f4fafc',
-    borderRadius: 50,
-    marginVertical: 10,
+    marginHorizontal: 16,
+    marginTop: 20,
   },
   nameView: {
     // marginLeft: 20,

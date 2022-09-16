@@ -1,5 +1,5 @@
 import {View, Text, TextInput, FlatList, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+
 import styles from './styles';
 import OptionButton from '../../components/OptionButton';
 import Backbutton from '../../components/Backbutton';
