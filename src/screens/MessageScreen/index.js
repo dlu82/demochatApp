@@ -15,7 +15,7 @@ const Index = ({item}) => {
   const [chat, setChat] = useState([]);
   const navigation = useNavigation();
   const {data} = useSelector(state => state.firebaseStore);
-
+  console.log(List);
   useEffect(() => {
     getDataFromStore();
   }, []);
@@ -34,7 +34,12 @@ const Index = ({item}) => {
 
   const CustomComponent = ({item}) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate('convo', {name: item?._data?.name})}
+      onPress={() =>
+        navigation.navigate('convo', {
+          name: item?._data?.name,
+          email: item?._data?.email,
+        })
+      }
       style={styles.CustomComponentView}>
       <View>
         <Image
@@ -42,7 +47,7 @@ const Index = ({item}) => {
           source={require('../../assets/images/lady.jpeg')}
         />
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 15, borderRadius: 10}}>
         <Text style={styles.nameView}>{item?._data?.name}</Text>
       </View>
     </TouchableOpacity>
