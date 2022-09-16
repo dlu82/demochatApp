@@ -8,6 +8,8 @@ import {TransitionSpecs} from '@react-navigation/stack';
 import InitialScreen from '../screens/InitialScreen';
 import ConvoScreen from '../screens/ConvoScreen';
 import BottomNavigation from './BottomNavigation';
+import user from '../screens/ProfileScreen';
+
 const index = () => {
   const Stack = createStackNavigator();
 
@@ -28,6 +30,7 @@ const index = () => {
         <Stack.Screen name={'initial'} component={InitialScreen} />
         <Stack.Screen name="convo" component={ConvoScreen} />
         <Stack.Screen name="bottomNav" component={BottomNavigation} />
+        {/* <Stack.Screen name="user" component={user} /> */}
       </Stack.Navigator>
     </React.Fragment>
   );

@@ -43,7 +43,7 @@ const Index = ({item}) => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1, backgroundColor: '#EEEEEE'}}>
       <View style={styles.subContainer}>
         <Header />
         <OptionButton />

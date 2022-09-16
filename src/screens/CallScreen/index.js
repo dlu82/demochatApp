@@ -4,8 +4,9 @@ import styles from './styles';
 
 const Index = () => {
   return (
-    <View style={[styles.container, {backgroundColor: '#fff', flex: 1}]}>
-      <Text>first page</Text>
+    <View style={styles.container}>
+      <Text>Call Screen</Text>
+      <Text>On Progress.......</Text>
     </View>
   );
 };

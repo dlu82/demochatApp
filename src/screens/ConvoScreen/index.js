@@ -6,10 +6,7 @@ import Backbutton from '../../components/Backbutton';
 import Feather from 'react-native-vector-icons/Feather';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import constants from '../../assets/constants/constants/';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
-import {Route} from '@react-navigation/native';
-
+import {useNavigation} from '@react-navigation/native';
 const Convo = () => {
   const [convo, setConvo] = useState([]);
   const [chat, setChat] = useState([]);
@@ -81,17 +78,15 @@ const Convo = () => {
         <OptionButton />
       </View>
 
-      <View>
-        <View style={{marginHorizontal: 16}}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            style={{marginBottom: 150}}
-            data={constants.messages}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            initialScrollIndex={5}
-          />
-        </View>
+      <View style={{marginHorizontal: 16}}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={{marginBottom: 130}}
+          data={constants.messages}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          initialScrollIndex={5}
+        />
       </View>
 
       <View
