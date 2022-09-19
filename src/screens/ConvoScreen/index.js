@@ -10,13 +10,19 @@ import constants from '../../constants/constants/';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 
+import {useSelector} from 'react-redux';
+
 const Convo = () => {
+  const {data} = useSelector(state => state.firebaseStore);
+
   const [convo, setConvo] = useState([]);
   const [chat, setChat] = useState([]);
-  // console.log(chat, '++++++++++++++++++++++++');
+  console.log(chat, '++++++++++++++++++++++++');
 
   const navigation = useNavigation();
   const Route = useRoute();
+  const email = Route.params.email;
+  console.log(data, '++++++++++++++++++++++++');
 
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
@@ -34,15 +40,15 @@ const Convo = () => {
   }, []);
 
   const date = new Date();
-  console.log(date);
 
   const onsubmit = () => {
+    console.log(chat, email, data.mail, date);
     firestore()
       .collection('Messages')
       .add({
         message: chat,
-        // from: '',
-        // to: '',
+        from: email,
+        to: data.mail,
         timeanddate: date,
       })
       .then(() => {
@@ -61,7 +67,7 @@ const Convo = () => {
           ) : (
             <View style={styles.sendChat}>
               <Text style={{textAlign: 'right', color: '#fff'}}>
-                {item.message}
+                {item._data.message}
               </Text>
             </View>
           )}
@@ -86,10 +92,10 @@ const Convo = () => {
         <FlatList
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 130}}
-          data={constants.messages}
+          data={convo}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          initialScrollIndex={5}
+          // initialScrollIndex={5}
         />
       </View>
 
@@ -123,6 +129,8 @@ const Convo = () => {
         <TouchableOpacity
           onPress={() => {
             onsubmit();
+
+            setChat();
           }}
           style={styles.typingView}>
           <Feather name={'send'} color={'white'} size={25} />

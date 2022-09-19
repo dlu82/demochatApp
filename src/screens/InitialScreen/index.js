@@ -32,9 +32,9 @@ const index = () => {
 
   const [username, setUsername] = useState('');
   const [errName, setErrname] = useState('');
-  const [mail, setMail] = useState('');
+  const [mail, setMail] = useState('justin@gmail.com');
   const [errMail, setErrmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('123456');
   const [errPass, setErrpass] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
