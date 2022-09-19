@@ -34,7 +34,7 @@ const Index = ({item}) => {
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
   const CustomComponent = ({item}) => (
-    <TouchableOpacity
+    <Pressable
       onPress={() =>
         navigation.navigate('convo', {
           name: item?._data?.name,
