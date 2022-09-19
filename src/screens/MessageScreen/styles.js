@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   CustomComponentView: {
     flex: 1,
     paddingVertical: 20,
+    borderRadius: 15,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     // marginLeft: 20,
     fontWeight: 'bold',
     color: 'black',
-    fontSize: 17,
+    fontSize: 15,
   },
 
   image: {

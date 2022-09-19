@@ -20,6 +20,7 @@ const TextInputComponents = ({
   value,
   secureTextEntry,
   container,
+  isIcon,
   ...props
 }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(secureTextEntry);
@@ -40,10 +41,17 @@ const TextInputComponents = ({
         {...props}
       />
       <TouchableOpacity onPress={handleToggleClick}>
-        <Image
-          source={Icon}
-          style={{width: 20, height: 20, tintColor: '#7E84A3', marginRight: 15}}
-        />
+        {isIcon && (
+          <Image
+            source={Icon}
+            style={{
+              width: 20,
+              height: 20,
+              tintColor: '#7E84A3',
+              marginRight: 15,
+            }}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );

@@ -13,19 +13,22 @@ import {useNavigation} from '@react-navigation/native';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import Modal from 'react-native-modal';
+import {userData} from '../../store/Slices/FirebaseSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
 import style from './style';
 import image from '../../constants/image';
 import Buttn from '../../components/Buttn Components';
 import TextInput from '../../components/InputComponent';
 import ErrCompnt from '../../components/ErrorMessgComponent';
-import Modal from 'react-native-modal';
-import {userData} from '../../store/Slices/FirebaseSlice';
-import {useDispatch} from 'react-redux';
 
 const index = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch({});
+
+  const {data} = useSelector(state => state.firebaseStore);
+  // console.log('fromINIT screen==', data);
 
   const [username, setUsername] = useState('');
   const [errName, setErrname] = useState('');
@@ -34,6 +37,7 @@ const index = () => {
   const [password, setPassword] = useState('');
   const [errPass, setErrpass] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
 
   useEffect(() => {
     if (mail != '') {
@@ -65,11 +69,11 @@ const index = () => {
   }, [mail, password, username]);
 
   const onSignin = async () => {
-    console.log('signinnn===');
-
+    // console.log('signinnn===');
     if (username == '' && mail == '' && password == '') {
       setErrname(true);
       setErrmail(true);
+      setErrpass(true);
       return;
 
       //   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -98,17 +102,22 @@ const index = () => {
     }
 
     if (!errPass && !errMail) {
+      setIsLoad(true);
+
       auth()
         .signInWithEmailAndPassword(mail, password)
         .then(async response => {
-          console.log('Login Success!======', response?.user?._user);
+          // console.log('Login Success!======', response?.user?._user);
           const user = await firestore().collection('USER').doc(mail).get();
+          console.log(user);
           const payload = {
             name: user?._data?.name,
             mail: user?._data?.email,
+            token: response?.user?._user?.uid,
           };
-          console.log('LOGIN USERRRR======= ', user);
+          // console.log('LOGIN USERRRR======= ', payload);
           await dispatch(userData(payload));
+          setIsLoad(false);
 
           Keyboard.dismiss();
           setMail('');
@@ -116,23 +125,29 @@ const index = () => {
           navigation.navigate('bottomNav');
         })
         .catch(error => {
-          console.log('sign in error=======', error.code);
+          // console.log('sign in error=======', error.code);
           if (error.code === 'auth/user-not-found') {
             // console.log('That email address is already in use!');
-            alert('User not Found Please Register Or Check Password');
+            alert('User not Found Please Register');
           }
 
           if (error.code === 'auth/invalid-email') {
-            console.log('That email address is invalid!');
-          }
+            alert('Mail is not correct!!!!');
 
+            // console.log('That email address is invalid!');
+          }
+          if (error.code === 'auth/wrong-password') {
+            // console.log('That email address is already in use!');
+            alert('Password is not correct!!!!');
+          }
+          setIsLoad(false);
           console.error(error);
         });
     }
   };
 
   const onSignup = async () => {
-    console.log('Pressedddddd==');
+    // console.log('Pressedddddd==');
 
     if (username == '' && mail == '' && password == '') {
       setErrname(true);
@@ -163,42 +178,48 @@ const index = () => {
       //     setErrname(true);
       //   }
     }
+    if (!errName) {
+      setIsLoad(true);
 
-    auth()
-      .createUserWithEmailAndPassword(mail, password)
-      .then(() => {
-        console.log('User account created & signed in!');
-        const payload = {
-          name: username,
-          mail: mail,
-        };
-        firestore()
-          .collection('USER')
-          .doc(mail)
-          .set({
+      auth()
+        .createUserWithEmailAndPassword(mail, password)
+        .then(res => {
+          console.log('User account created & signed in!', res);
+          const payload = {
             name: username,
-            email: mail,
-          })
-          .then(res => {
-            console.log('User added!===== ', res);
-            Keyboard.dismiss();
-            setMail('');
-            setPassword('');
-            dispatch(userData(payload));
-            navigation.navigate('bottomNav');
-          })
-          .catch(err => console.log('add firestore error=====', err));
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-          alert('That email address is already in use!');
-        }
+            mail: mail,
+            token: res?.user?._user?.uid,
+          };
+          firestore()
+            .collection('USER')
+            .doc(mail)
+            .set({
+              name: username,
+              email: mail,
+            })
+            .then(res => {
+              console.log('User added!===== ', res);
+              Keyboard.dismiss();
+              setMail('');
+              setPassword('');
+              dispatch(userData(payload));
+              navigation.navigate('bottomNav');
+            })
+            .catch(err => console.log('add firestore error=====', err));
+          setIsLoad(false);
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+            alert('That email address is already in use!');
+          }
 
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-      });
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
+          setIsLoad(false);
+        });
+    }
   };
 
   return (
@@ -236,6 +257,7 @@ const index = () => {
               Textinput={'Password'}
               inputColor={'#7E84A3'}
               secureTextEntry
+              isIcon
               Icon={image.Invivisible}
               onChangeText={text => setPassword(text)}
               value={password}
@@ -250,11 +272,16 @@ const index = () => {
           </View>
         </View>
         <View style={{marginTop: 20, alignItems: 'center'}}>
-          <Buttn label={'Login'} tapOn={onSignin} />
+          <Buttn
+            label={'Login'}
+            tapOn={onSignin}
+            isLoading={isLoad}
+            indicatorColor={'#fff'}
+          />
           <Buttn
             label={'Signup'}
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
-            btnStyle={{backgroundColor: '#fff', width: 100}}
+            btnStyle={{backgroundColor: '#fff', width: 180}}
             tapOn={() => setModalVisible(true)}
           />
         </View>
@@ -278,6 +305,8 @@ const index = () => {
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
             btnStyle={{backgroundColor: '#fff', width: 100}}
             tapOn={onSignup}
+            isLoading={isLoad}
+            indicatorColor={'#000'}
           />
         </View>
       </Modal>

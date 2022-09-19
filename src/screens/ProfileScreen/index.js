@@ -6,22 +6,44 @@ import {
   ImageBackground,
   Image,
   Pressable,
+  Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
+import {clearData, userData} from '../../store/Slices/FirebaseSlice';
 import image from '../../constants/image';
 import style from './styles';
-import {useSelector} from 'react-redux';
-import {userData} from '../../store/Slices/FirebaseSlice';
+import Buttn from '../../components/Buttn Components';
 
 const index = ({}) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const didTapOnLogout = () => {
+    Alert.alert('Delete', 'Are you sure you want to Logout?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => logoutFunction()},
+    ]);
+  };
+
+  const logoutFunction = async () => {
+    await dispatch(userData(null));
+    console.log('User signed out!');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'initial'}],
+      }),
+    );
+  };
   const {data} = useSelector(state => state.firebaseStore);
   console.log('PROFILE===========  ', data);
-
-  const navigation = useNavigation();
-
-  const [username, setUsername] = useState('');
-  const [mail, setMail] = useState('');
 
   return (
     <View style={style.container}>
@@ -47,6 +69,11 @@ const index = ({}) => {
         <Text style={style.input}>Name: {data?.name}</Text>
         <Text style={style.input}>E mail: {data?.mail}</Text>
       </View>
+      <Buttn
+        label={'Logout'}
+        btnStyle={{width: 100, borderRadius: 10, backgroundColor: '#000'}}
+        tapOn={didTapOnLogout}
+      />
     </View>
   );
 };

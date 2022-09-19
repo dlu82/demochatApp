@@ -1,4 +1,5 @@
-import {View, Text, TextInput, FlatList, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, FlatList, Image, Pressable} from 'react-native';
 
 import styles from './styles';
 import OptionButton from '../../components/OptionButton';
@@ -12,7 +13,7 @@ import firestore from '@react-native-firebase/firestore';
 const Convo = () => {
   const [convo, setConvo] = useState([]);
   const [chat, setChat] = useState([]);
-  console.log(chat, '++++++++++++++++++++++++');
+  // console.log(chat, '++++++++++++++++++++++++');
 
   const navigation = useNavigation();
   const Route = useRoute();
@@ -25,7 +26,7 @@ const Convo = () => {
 
   const getDataFromStore = async () => {
     const users = await firestore().collection('Messages').get();
-    console.log(users, '==================== users =============');
+    // console.log(users, '==================== users =============');
   };
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const Convo = () => {
   };
 
   const CustomComponent = ({item}) => (
-    <TouchableOpacity onPress={() => navigation.navigate('convo')}>
+    <Pressable onPress={() => navigation.navigate('convo')}>
       <View style={{flexDirection: 'row'}}>
         <View style={{padding: 20, width: '100%'}}>
           {item.position == 0 ? (
@@ -66,7 +67,7 @@ const Convo = () => {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 
   return (

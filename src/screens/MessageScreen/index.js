@@ -1,5 +1,6 @@
-import {View, Text, FlatList, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
+
+import {View, Text, FlatList, Image, Pressable} from 'react-native';
 import Header from '../../components/Header';
 import OptionButton from '../../components/OptionButton';
 import SearchView from '../../components/SearchView';
@@ -33,7 +34,7 @@ const Index = ({item}) => {
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
   const CustomComponent = ({item}) => (
-    <TouchableOpacity
+    <Pressable
       onPress={() => navigation.navigate('convo', {name: item?._data?.name})}
       style={styles.CustomComponentView}>
       <View>
@@ -42,10 +43,10 @@ const Index = ({item}) => {
           source={require('../../assets/images/lady.jpeg')}
         />
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 10}}>
         <Text style={styles.nameView}>{item?._data?.name}</Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 
   return (
@@ -58,10 +59,10 @@ const Index = ({item}) => {
         <SearchView />
       </View>
 
-      <View style={{marginHorizontal: 16}}>
+      <View style={{marginHorizontal: 10}}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          style={{marginBottom: 40}}
+          contentContainerStyle={{paddingBottom: 250}}
           data={List}
           renderItem={renderItem}
           keyExtractor={item => item.id}

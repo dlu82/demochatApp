@@ -7,6 +7,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  ForgotPassword: {
+    color: '#000',
+    fontSize: 13,
+    fontFamily: 'Inter-Regular',
+    marginTop: 5,
+  },
   modalCont: {
     backgroundColor: '#E0E0E0',
     alignItems: 'center',
