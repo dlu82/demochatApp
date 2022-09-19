@@ -10,9 +10,13 @@ const counterSlice = createSlice({
       console.log('DATAATATATATA=========   ', action);
       state.data = action?.payload;
     },
+    clearData: (state, action) => {
+      console.log('action===============   ', action);
+      state.data == null;
+    },
   },
 });
 
-export const {userData} = counterSlice.actions;
+export const {userData, clearData} = counterSlice.actions;
 
 export default counterSlice.reducer;

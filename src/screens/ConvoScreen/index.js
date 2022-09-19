@@ -1,5 +1,6 @@
-import {View, Text, TextInput, FlatList, Image} from 'react-native';
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, FlatList, Image, Pressable} from 'react-native';
+
 import styles from './styles';
 import OptionButton from '../../components/OptionButton';
 import Backbutton from '../../components/Backbutton';
@@ -80,6 +81,11 @@ const Convo = () => {
     console.log('Messages useEffect', isDoc1Available, isDoc2Available);
   }, [email]);
 
+  const getDataFromStore = async () => {
+    const users = await firestore().collection('Messages').get();
+    // console.log(users, '==================== users =============');
+  };
+
   useEffect(() => {
     if (availableDocId) {
       firestore()
@@ -116,7 +122,7 @@ const Convo = () => {
   };
 
   const CustomComponent = ({item}) => (
-    <TouchableOpacity>
+    <Pressable onPress={() => navigation.navigate('convo')}>
       <View style={{flexDirection: 'row'}}>
         <View style={{padding: 20, width: '100%'}}>
           {item._data.from === data.mail ? (
@@ -132,7 +138,7 @@ const Convo = () => {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 
   return (
