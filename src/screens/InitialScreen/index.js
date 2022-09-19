@@ -27,11 +27,11 @@ const index = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch({});
 
-  const [username, setUsername] = useState('justin@gmail.com');
+  const [username, setUsername] = useState('');
   const [errName, setErrname] = useState('');
-  const [mail, setMail] = useState('justin@gmail.com');
+  const [mail, setMail] = useState('');
   const [errMail, setErrmail] = useState('');
-  const [password, setPassword] = useState('123456');
+  const [password, setPassword] = useState('');
   const [errPass, setErrpass] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -69,6 +69,7 @@ const index = () => {
 
     if (username == '' && mail == '' && password == '') {
       setErrname(true);
+
       setErrmail(true);
       return;
 

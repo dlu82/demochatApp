@@ -15,17 +15,18 @@ const Convo = () => {
   const {data} = useSelector(state => state.firebaseStore);
 
   const [convo, setConvo] = useState([]);
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState();
+  const [availableDocId, setAvailableDocId] = useState('');
 
   const navigation = useNavigation();
   const Route = useRoute();
   const email = Route.params.email;
-  console.log(data, '++++++++++++++++++++++++');
+  console.log(data, availableDocId, '++++++++++++++++++++++++');
 
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
   const onResult = QuerySnapshot => {
-    console.log('Got Users collection result========.', QuerySnapshot?._docs);
+    console.log('Got Users collection result========.', QuerySnapshot);
     if (QuerySnapshot?._docs.length > 0) {
       setConvo(QuerySnapshot?._docs);
     } else {
@@ -37,13 +38,62 @@ const Convo = () => {
     console.error('error fetch=========', error);
   };
 
-  useEffect(() => {
-    firestore().collection('Messages').onSnapshot(onResult, onError);
-  }, []);
+  useEffect(async () => {
+    const docId_1 = data.mail + '_' + email;
+    const docId_2 = email + '_' + data.mail;
+
+    const isDoc1Available = await firestore()
+      .collection('Messages')
+      .doc(docId_1)
+      .collection('CHAT')
+      .get();
+    const isDoc2Available = await firestore()
+      .collection('Messages')
+      .doc(docId_2)
+      .collection('CHAT')
+      .get();
+
+    if (
+      isDoc1Available?._docs.length == 0 &&
+      isDoc2Available?._docs.length == 0
+    ) {
+      console.log('doc not exist======');
+      firestore()
+        .collection('Messages')
+        .doc(docId_1)
+        .collection('CHAT')
+        .add({
+          from: data.mail,
+          to: email,
+          message: '',
+        })
+        .then(() => {
+          console.log('User added!========');
+        });
+    }
+    if (isDoc1Available?._docs.length > 0) {
+      setAvailableDocId(docId_1);
+    } else if (isDoc2Available?._docs.length > 0) {
+      setAvailableDocId(docId_2);
+    }
+
+    console.log('Messages useEffect', isDoc1Available, isDoc2Available);
+  }, [email]);
 
   useEffect(() => {
-    const users = firestore().collection('Messages').get();
-  }, []);
+    if (availableDocId) {
+      firestore()
+        .collection('Messages')
+        .doc(availableDocId)
+        .collection('CHAT')
+        .orderBy('timeanddate', 'asc')
+        .onSnapshot(onResult, onError);
+    }
+  }, [availableDocId]);
+
+  // useEffect(() => {
+  //   const users = firestore().collection('Messages').get();
+  // }, []);
 
   const date = new Date();
 
@@ -51,14 +101,17 @@ const Convo = () => {
     console.log(chat, email, data.mail, date);
     firestore()
       .collection('Messages')
+      .doc(availableDocId)
+      .collection('CHAT')
       .add({
         message: chat,
-        from: email,
-        to: data.mail,
+        from: data.mail,
+        to: email,
         timeanddate: date,
       })
       .then(() => {
-        console.log('chat added!');
+        console.log('chat added!========');
+        setChat('');
       });
   };
 
@@ -66,15 +119,15 @@ const Convo = () => {
     <TouchableOpacity>
       <View style={{flexDirection: 'row'}}>
         <View style={{padding: 20, width: '100%'}}>
-          {item.position == 0 ? (
-            <View style={styles.recieveChat}>
-              <Text style={{textAlign: 'left'}}>{item.message}</Text>
-            </View>
-          ) : (
+          {item._data.from === data.mail ? (
             <View style={styles.sendChat}>
               <Text style={{textAlign: 'right', color: '#fff'}}>
                 {item._data.message}
               </Text>
+            </View>
+          ) : (
+            <View style={styles.recieveChat}>
+              <Text style={{textAlign: 'left'}}>{item._data.message}</Text>
             </View>
           )}
         </View>
@@ -125,6 +178,7 @@ const Convo = () => {
               <TextInput
                 onChangeText={s => setChat(s)}
                 placeholder="Type something ..."
+                value={chat}
               />
             </View>
           </View>
@@ -135,8 +189,6 @@ const Convo = () => {
         <TouchableOpacity
           onPress={() => {
             onsubmit();
-
-            setChat();
           }}
           style={styles.typingView}>
           <Feather name={'send'} color={'white'} size={25} />
