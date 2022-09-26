@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, TextInput, FlatList, Image, Pressable} from 'react-native';
 
 import styles from './styles';
@@ -13,6 +13,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 
 const Convo = () => {
+  const ref = useRef();
   const {data} = useSelector(state => state.firebaseStore);
 
   const [convo, setConvo] = useState([]);
@@ -22,12 +23,12 @@ const Convo = () => {
   const navigation = useNavigation();
   const Route = useRoute();
   const email = Route.params.email;
-  console.log(data, availableDocId, '++++++++++++++++++++++++');
+  // console.log(data, availableDocId, '++++++++++++++++++++++++');
 
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
   const onResult = QuerySnapshot => {
-    console.log('Got Users collection result========.', QuerySnapshot);
+    // console.log('Got Users collection result========.', QuerySnapshot);
     if (QuerySnapshot?._docs.length > 0) {
       setConvo(QuerySnapshot?._docs);
     } else {
@@ -70,6 +71,7 @@ const Convo = () => {
         })
         .then(() => {
           console.log('User added!========');
+          setAvailableDocId(docId_1);
         });
     }
     if (isDoc1Available?._docs.length > 0) {
@@ -81,10 +83,10 @@ const Convo = () => {
     console.log('Messages useEffect', isDoc1Available, isDoc2Available);
   }, [email]);
 
-  const getDataFromStore = async () => {
-    const users = await firestore().collection('Messages').get();
-    // console.log(users, '==================== users =============');
-  };
+  // const getDataFromStore = async () => {
+  //   const users = await firestore().collection('Messages').get();
+  //   // console.log(users, '==================== users =============');
+  // };
 
   useEffect(() => {
     if (availableDocId) {
@@ -118,10 +120,11 @@ const Convo = () => {
       .then(() => {
         console.log('chat added!========');
         setChat('');
+        ref.current.scrollToEnd();
       });
   };
 
-  const CustomComponent = ({item}) => (
+  const CustomComponent = ({item, index}) => (
     <Pressable onPress={() => navigation.navigate('convo')}>
       <View style={{flexDirection: 'row'}}>
         <View style={{padding: 20, width: '100%'}}>
@@ -155,6 +158,8 @@ const Convo = () => {
 
       <View style={{marginHorizontal: 16}}>
         <FlatList
+          ref={ref}
+          onLayout={index => ref.current.scrollToEnd()}
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 130}}
           data={convo}

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
+import {useToast} from 'react-native-toast-notifications';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -26,6 +27,7 @@ import ErrCompnt from '../../components/ErrorMessgComponent';
 const index = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch({});
+  const toast = useToast();
 
   const {data} = useSelector(state => state.firebaseStore);
   // console.log('fromINIT screen==', data);
@@ -38,6 +40,7 @@ const index = () => {
   const [errPass, setErrpass] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
+  const [isLoad1, setIsLoad1] = useState(false);
 
   useEffect(() => {
     if (mail != '') {
@@ -66,6 +69,7 @@ const index = () => {
         setErrname(true);
       }
     }
+    // toast.show('Hello World');
   }, [mail, password, username]);
 
   const onSignin = async () => {
@@ -128,18 +132,41 @@ const index = () => {
         .catch(error => {
           // console.log('sign in error=======', error.code);
           if (error.code === 'auth/user-not-found') {
+            toast.show('auth/user-not-found', {
+              type: 'danger',
+              placement: 'bottom',
+              duration: 4000,
+              offset: 30,
+              animationType: 'zoom-in',
+            });
             // console.log('That email address is already in use!');
-            alert('User not Found Please Register');
+            // alert('User not Found Please Register');
           }
 
           if (error.code === 'auth/invalid-email') {
-            alert('Mail is not correct!!!!');
+            toast.show('This mail is not valid!', {
+              type: 'danger',
+              placement: 'bottom',
+              duration: 4000,
+              offset: 30,
+              animationType: 'zoom-in',
+            });
+            // alert('Mail is not correct!!!!');
 
             // console.log('That email address is invalid!');
           }
           if (error.code === 'auth/wrong-password') {
             // console.log('That email address is already in use!');
-            alert('Password is not correct!!!!');
+            toast.show('Password is not correct!', {
+              type: 'danger',
+              placement: 'bottom',
+              duration: 4000,
+              offset: 30,
+              animationType: 'zoom-in',
+            });
+            // console.log('Wrongggggg=====');
+
+            // alert('Password is not correct!!!!');
           }
           setIsLoad(false);
           console.error(error);
@@ -180,7 +207,7 @@ const index = () => {
       //   }
     }
     if (!errName) {
-      setIsLoad(true);
+      setIsLoad1(true);
 
       auth()
         .createUserWithEmailAndPassword(mail, password)
@@ -199,7 +226,7 @@ const index = () => {
               email: mail,
             })
             .then(res => {
-              console.log('User added!===== ', res);
+              // console.log('User added!===== ', res);
               Keyboard.dismiss();
               setMail('');
               setPassword('');
@@ -207,18 +234,32 @@ const index = () => {
               navigation.navigate('bottomNav');
             })
             .catch(err => console.log('add firestore error=====', err));
-          setIsLoad(false);
+          setIsLoad1(false);
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');
-            alert('That email address is already in use!');
+            toast.show('That email address is already in use!', {
+              type: 'warning',
+              placement: 'top',
+              duration: 4000,
+              offset: 30,
+              animationType: 'zoom-in',
+            });
+            // alert('That email address is already in use!');
           }
 
           if (error.code === 'auth/invalid-email') {
+            toast.show('Enter a valid mail!', {
+              type: 'warning',
+              placement: 'top',
+              duration: 4000,
+              offset: 30,
+              animationType: 'zoom-in',
+            });
             console.log('That email address is invalid!');
           }
-          setIsLoad(false);
+          setIsLoad1(false);
         });
     }
   };
@@ -306,7 +347,7 @@ const index = () => {
             txtStyle={{color: '#BDBDBD', fontSize: 15}}
             btnStyle={{backgroundColor: '#fff', width: 100}}
             tapOn={onSignup}
-            isLoading={isLoad}
+            isLoading={isLoad1}
             indicatorColor={'#000'}
           />
         </View>

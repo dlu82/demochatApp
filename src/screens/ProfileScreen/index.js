@@ -43,7 +43,7 @@ const index = ({}) => {
     );
   };
   const {data} = useSelector(state => state.firebaseStore);
-  console.log('PROFILE===========  ', data);
+  // console.log('PROFILE===========  ', data);
 
   return (
     <View style={style.container}>

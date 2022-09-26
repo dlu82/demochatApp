@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   },
   searchView: {
     flexDirection: 'row',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#E0E0E0',
     paddingHorizontal: 20,
     marginHorizontal: 20,
     borderRadius: 40,
