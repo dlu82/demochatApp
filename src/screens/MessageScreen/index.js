@@ -25,7 +25,7 @@ const Index = ({item}) => {
     const users = await firestore().collection('USER').get();
 
     const filterData = users._docs.filter((item, index) => {
-      console.log(item._data.email, data.mail);
+      // console.log(item._data.email, data.mail);
       if (item._data.email != data.mail) return item;
     });
     setList(filterData);

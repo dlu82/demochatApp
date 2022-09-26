@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {View, Text, TextInput, FlatList, Image, Pressable} from 'react-native';
 
 import styles from './styles';
@@ -13,6 +13,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 
 const Convo = () => {
+  const flatlistRef = useRef();
   const {data} = useSelector(state => state.firebaseStore);
 
   const [convo, setConvo] = useState([]);
@@ -70,6 +71,7 @@ const Convo = () => {
         })
         .then(() => {
           console.log('User added!========');
+          setAvailableDocId(docId_1);
         });
     }
     if (isDoc1Available?._docs.length > 0) {
@@ -86,6 +88,10 @@ const Convo = () => {
     // console.log(users, '==================== users =============');
   };
 
+  // useEffect(() => {
+  //   flatlistRef.current.scrollToEnd({animating: true});
+  // }, []);
+
   useEffect(() => {
     if (availableDocId) {
       firestore()
@@ -96,10 +102,6 @@ const Convo = () => {
         .onSnapshot(onResult, onError);
     }
   }, [availableDocId]);
-
-  // useEffect(() => {
-  //   const users = firestore().collection('Messages').get();
-  // }, []);
 
   const date = new Date();
 
@@ -117,9 +119,12 @@ const Convo = () => {
       })
       .then(() => {
         console.log('chat added!========');
+        flatlistRef.current.scrollToEnd({animating: true});
         setChat('');
       });
   };
+
+  const onPressFunction = () => {};
 
   const CustomComponent = ({item}) => (
     <Pressable onPress={() => navigation.navigate('convo')}>
@@ -155,6 +160,7 @@ const Convo = () => {
 
       <View style={{marginHorizontal: 16}}>
         <FlatList
+          ref={flatlistRef}
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 130}}
           data={convo}
@@ -180,7 +186,7 @@ const Convo = () => {
             <TouchableOpacity>
               <Feather name={'smile'} color={'#CFD4DD'} size={25} />
             </TouchableOpacity>
-            <View style={{marginLeft: 10}}>
+            <View style={{marginLeft: 10, width: '85%'}}>
               <TextInput
                 onChangeText={s => setChat(s)}
                 placeholder="Type something ..."
