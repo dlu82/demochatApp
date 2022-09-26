@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, {useEffect, useState, useRef} from 'react';
+=======
+import React, {useEffect, useRef, useState} from 'react';
+>>>>>>> db3b7d9f2f6780d2c8bc6e2f242ffb24b43984f6
 import {View, Text, TextInput, FlatList, Image, Pressable} from 'react-native';
 
 import styles from './styles';
@@ -13,7 +17,11 @@ import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 
 const Convo = () => {
+<<<<<<< HEAD
   const flatlistRef = useRef();
+=======
+  const ref = useRef();
+>>>>>>> db3b7d9f2f6780d2c8bc6e2f242ffb24b43984f6
   const {data} = useSelector(state => state.firebaseStore);
 
   const [convo, setConvo] = useState([]);
@@ -23,12 +31,12 @@ const Convo = () => {
   const navigation = useNavigation();
   const Route = useRoute();
   const email = Route.params.email;
-  console.log(data, availableDocId, '++++++++++++++++++++++++');
+  // console.log(data, availableDocId, '++++++++++++++++++++++++');
 
   const renderItem = ({item}) => <CustomComponent item={item} />;
 
   const onResult = QuerySnapshot => {
-    console.log('Got Users collection result========.', QuerySnapshot);
+    // console.log('Got Users collection result========.', QuerySnapshot);
     if (QuerySnapshot?._docs.length > 0) {
       setConvo(QuerySnapshot?._docs);
     } else {
@@ -83,10 +91,10 @@ const Convo = () => {
     console.log('Messages useEffect', isDoc1Available, isDoc2Available);
   }, [email]);
 
-  const getDataFromStore = async () => {
-    const users = await firestore().collection('Messages').get();
-    // console.log(users, '==================== users =============');
-  };
+  // const getDataFromStore = async () => {
+  //   const users = await firestore().collection('Messages').get();
+  //   // console.log(users, '==================== users =============');
+  // };
 
   // useEffect(() => {
   //   flatlistRef.current.scrollToEnd({animating: true});
@@ -121,12 +129,17 @@ const Convo = () => {
         console.log('chat added!========');
         flatlistRef.current.scrollToEnd({animating: true});
         setChat('');
+        ref.current.scrollToEnd();
       });
   };
 
+<<<<<<< HEAD
   const onPressFunction = () => {};
 
   const CustomComponent = ({item}) => (
+=======
+  const CustomComponent = ({item, index}) => (
+>>>>>>> db3b7d9f2f6780d2c8bc6e2f242ffb24b43984f6
     <Pressable onPress={() => navigation.navigate('convo')}>
       <View style={{flexDirection: 'row'}}>
         <View style={{padding: 20, width: '100%'}}>
@@ -160,7 +173,12 @@ const Convo = () => {
 
       <View style={{marginHorizontal: 16}}>
         <FlatList
+<<<<<<< HEAD
           ref={flatlistRef}
+=======
+          ref={ref}
+          onLayout={index => ref.current.scrollToEnd()}
+>>>>>>> db3b7d9f2f6780d2c8bc6e2f242ffb24b43984f6
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 130}}
           data={convo}

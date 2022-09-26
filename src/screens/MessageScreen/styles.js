@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
   },
   CustomComponentView: {
     flex: 1,
-    borderRadius: 10,
+    borderRadius: 30,
     paddingVertical: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#E0E0E0',
     marginHorizontal: 10,
-    marginTop: 20,
+    marginVertical: 10,
   },
   nameView: {
     // marginLeft: 20,

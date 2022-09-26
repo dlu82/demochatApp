@@ -1,8 +1,9 @@
-import {StyleSheet, LogBox} from 'react-native';
 import React from 'react';
+import {StyleSheet, LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ToastProvider} from 'react-native-toast-notifications';
 
 import Navigations from './src/navigations/index';
 import {Provider} from 'react-redux';
@@ -36,15 +37,17 @@ let persistor = persistStore(store);
 const App = () => {
   LogBox.ignoreAllLogs();
   return (
-    <SafeAreaProvider>
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <NavigationContainer>
-            <Navigations />
-          </NavigationContainer>
-        </PersistGate>
-      </Provider>
-    </SafeAreaProvider>
+    <ToastProvider>
+      <SafeAreaProvider>
+        <Provider store={store}>
+          <PersistGate persistor={persistor}>
+            <NavigationContainer>
+              <Navigations />
+            </NavigationContainer>
+          </PersistGate>
+        </Provider>
+      </SafeAreaProvider>
+    </ToastProvider>
   );
 };
 

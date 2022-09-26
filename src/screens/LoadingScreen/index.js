@@ -6,7 +6,7 @@ import {CommonActions} from '@react-navigation/native';
 const index = ({navigation}) => {
   //   const {token} = useSelector(state => state.firebaseStore);
   const {data} = useSelector(state => state.firebaseStore);
-  console.log('DATA==', data);
+  // console.log('DATA==', data);
 
   useEffect(() => {
     if (data?.token) {

@@ -7,11 +7,11 @@ const counterSlice = createSlice({
   initialState,
   reducers: {
     userData: (state, action) => {
-      console.log('DATAATATATATA=========   ', action);
+      // console.log('DATAATATATATA=========   ', action);
       state.data = action?.payload;
     },
     clearData: (state, action) => {
-      console.log('action===============   ', action);
+      // console.log('action===============   ', action);
       state.data == null;
     },
   },
